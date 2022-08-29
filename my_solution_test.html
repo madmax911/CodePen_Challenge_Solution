@@ -1,7 +1,46 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/><meta http-equiv="Expires" content="0"/><meta http-equiv="Pragma" content="no-cache"/>
-<title> Remote Keyboard Walker </title>
-<div id="contents"></div><script src="my_solution.js"></script>
-<!--=================================================================--><script>
+<title> Remote Keyboard Walker </title></head><body>
+<div id="contents"></div>
+<!--================================================================--><script>
+
+function remoteControl(word)
+{
+  const kb =
+  [
+    ['q','w','e','r','t','y','u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l','' ],
+    ['z','x','c','v','b','n','m','', '', '' ]
+  ];
+
+  let pos = {'x': 0, 'y': 0};   //  q
+
+  let moveNext = (letter) =>
+  {
+    let target = {'x': 0, 'y': 0};
+    let dist = {'x': 0, 'y': 0};
+
+    target.x = kb.map(v => v.indexOf(letter)).filter(v => v > -1)[0];
+    target.y = kb.map(v => v.indexOf(letter)).map((v, i) => v > -1 ? i : v).filter(v => v > -1)[0];
+
+    dist.x = target.x - pos.x;
+    dist.y = target.y - pos.y;
+
+    let nextSeq =
+    [
+      Array(Math.abs(dist.y)).fill(dist.y < 0 ? 'up'   : 'down' ).join(', '),
+      Array(Math.abs(dist.x)).fill(dist.x < 0 ? 'left' : 'right').join(', '),
+      'select'
+    ].filter(v => v).join(', ');
+
+    pos = target;
+
+    return nextSeq;
+  }
+
+  return word.split('').map(v => moveNext(v)).join(', ');
+}
+
+contents.innerHTML = "<b>The 3 pairs of lines below should be matching - indicating passing all tests. <b><br><br>";
 
 console.log(contents.innerHTML += "down, down, right, right, select, up, left, left, select, up, right, right, right, select");
 contents.innerHTML += "<br>";
@@ -16,4 +55,4 @@ contents.innerHTML += "<br>";
 console.log(contents.innerHTML += remoteControl("code"));
 contents.innerHTML += "<br>";
 
-/*-----------------------------------------------------*/</script></body></html>
+/*----------------------------------------------------*/</script></body></html>
